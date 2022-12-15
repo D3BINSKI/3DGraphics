@@ -2,21 +2,20 @@ using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using ObjParser;
 using WinFormsApp.GeometryComponents;
+using WinFormsApp.GraphicTools;
 
 namespace WinFormsApp
 {
     public partial class TopLevelForm : Form
     {
-        static readonly System.Windows.Forms.Timer _mainTimer = new System.Windows.Forms.Timer();
-        private List<Render> _meshes;
+        static readonly System.Windows.Forms.Timer _mainTimer = new();
+        private readonly List<Render> _meshes;
         private Render _renderedObject;
-        private Scene _mainScene;
-        private Configuration _config;
-        private string _projectDir;
-        private Camera _camera;
+        private Scene _scene;
+        private readonly string _projectDir;
 
 
-        public TopLevelForm(Render renderObject)
+        public TopLevelForm()
         {
             string workingDirectory = Environment.CurrentDirectory;
             _projectDir = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
@@ -24,8 +23,16 @@ namespace WinFormsApp
             InitializeComponent();
 
             renderPictureBox.CreateGraphics();
+            
+            var importedObject = new Obj();
+            importedObject.LoadObj(_projectDir + @"\Models\full-torus-triangulated.obj");
+            
+            Render render = new Render(  
+                importedObject, 
+                Image.FromFile(_projectDir + @"\Images\2k_earth_daymap.jpg"),
+                new NormalMap(Image.FromFile(_projectDir + @"\NormalMaps\2k_earth_normal_map.tif"), new Size(500, 500)));
 
-            _renderedObject = renderObject;
+            _renderedObject = render;
             _meshes = new List<Render> { _renderedObject };
             InitializeScene();
 
@@ -44,19 +51,22 @@ namespace WinFormsApp
                 Color.CadetBlue,
                 new Point(renderPictureBox.Width / 2, renderPictureBox.Height / 2),
                 600);
+            
+            var defaultCamera = new Camera();
 
-            _mainScene = new Scene(
+            _scene = new Scene(
                 renderPictureBox,
                 _meshes,
                 defaultBackground,
-                defaultIllumination);
+                defaultIllumination,
+                defaultCamera);
         }
 
         private void InitializeTimer()
         {
             var timerInterval = 100;
-            _mainScene?.UpdateDimensions();
-            if (_mainScene is not null) _mainTimer.Tick += _mainScene.Render;
+            _scene?.UpdateDimensions();
+            if (_scene is not null) _mainTimer.Tick += _scene.Render;
             _mainTimer.Interval = timerInterval;
             _mainTimer.Start();
         }
@@ -74,7 +84,7 @@ namespace WinFormsApp
 
         private void pictureBox1_SizeChanged(object sender, EventArgs e)
         {
-            _mainScene?.UpdateDimensions();
+            _scene?.UpdateDimensions();
             RefreshMainScene();
         }
 
@@ -98,7 +108,7 @@ namespace WinFormsApp
 
         private void RefreshMainScene()
         {
-            _mainScene?.FillRenderedObject();
+            _scene?.FillRenderedObject();
         }
 
         private void pauseBttn_Click(object sender, EventArgs e)
@@ -113,7 +123,7 @@ namespace WinFormsApp
 
         private void ZValueTrackbarChanged(object sender, EventArgs e)
         {
-            _mainScene.SetIlluminationHeight(zValueTrackBar.Value);
+            _scene.SetIlluminationHeight(zValueTrackBar.Value);
         }
 
         private void vectorInterpolationSetRadioBttn_CheckedChanged(object sender, EventArgs e)
@@ -122,7 +132,7 @@ namespace WinFormsApp
             {
                 colorInterpolationSetRadioBttn.Checked = false;
 
-                _mainScene.SetVectorInterpolation();
+                _scene.SetVectorInterpolation();
             }
         }
 
@@ -132,7 +142,7 @@ namespace WinFormsApp
             {
                 vectorInterpolationSetRadioBttn.Checked = false;
 
-                _mainScene.SetColorInterpolation();
+                _scene.SetColorInterpolation();
             }
         }
 
@@ -152,7 +162,7 @@ namespace WinFormsApp
                 //Get the path of specified file
                 string filePath = openFileDialog.FileName;
                 var image = Image.FromFile(filePath);
-                _mainScene.RenderObj.SetTexture(new Bitmap(image));
+                _scene.RenderObj.SetTexture(new Bitmap(image));
             }
 
             _mainTimer.Start();
@@ -175,7 +185,7 @@ namespace WinFormsApp
                 string filePath = openFileDialog.FileName;
                 var image = Image.FromFile(filePath);
 
-                _mainScene.RenderObj.SetNormalMap(new Bitmap(image, renderPictureBox.Width, renderPictureBox.Height));
+                _scene.RenderObj.SetNormalMap(new Bitmap(image, renderPictureBox.Width, renderPictureBox.Height));
             }
 
             _mainTimer.Start();
@@ -185,7 +195,7 @@ namespace WinFormsApp
         {
             var colorDialog = new ColorDialog();
             colorDialog.ShowDialog();
-            _mainScene.RenderObj.SetTexture(colorDialog.Color);
+            _scene.RenderObj.SetTexture(colorDialog.Color);
         }
 
         private void setRenderObjectBttn_Click(object sender, EventArgs e)
@@ -211,7 +221,7 @@ namespace WinFormsApp
                     _renderedObject.TextureImage,
                     _renderedObject.NormalMap);
                 _renderedObject.FitToCanvas(renderPictureBox.Height, renderPictureBox.Width, 20);
-                _mainScene.SetRenderObject(_renderedObject);
+                _scene.SetRenderObject(_renderedObject);
                 RefreshMainScene();
             }
 
@@ -221,13 +231,13 @@ namespace WinFormsApp
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             radioButton2.Checked = false;
-            _mainScene.SetNormalMapUsage();
+            _scene.SetNormalMapUsage();
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             radioButton1.Checked = false;
-            _mainScene.SetHeightMapUsage();
+            _scene.SetHeightMapUsage();
         }
     }
 }

@@ -30,7 +30,7 @@ public class Scene
         ChangeRenderObject(render);
     }
     
-    public Scene(PictureBox pictureBox, List<Render> meshes, string backgroundFile, Illumination illumination)
+    public Scene(PictureBox pictureBox, List<Render> meshes, string backgroundFile, Illumination illumination, Camera camera)
     {
         _renderObj = meshes.First();
         _scenePictureBox = pictureBox;
@@ -41,7 +41,7 @@ public class Scene
         _painter = new Painter();
         isVectorInterpolation = true;
         _meshes = meshes;
-        _camera = new Camera(new Vector3(-100, -100, 100000), new Vector3(1, 1, 1), new Vector3(0, 0, 1));
+        _camera = camera;
     }
     
     public void SetVectorInterpolation()

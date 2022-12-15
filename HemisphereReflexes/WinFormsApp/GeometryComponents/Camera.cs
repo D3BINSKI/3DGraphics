@@ -7,6 +7,13 @@ public class Camera
     private Vector3 Position { get; set; }
     private Vector3 Target { get; set; }
     private Vector3 Up { get; set; }
+    
+    public Camera()
+    {
+        Position = new Vector3(0, 0, 0);
+        Target = new Vector3(1, 1, 0);
+        Up = new Vector3(0, 0, 1);
+    }
 
     public Camera(Vector3 position, Vector3 target, Vector3 up)
     {
