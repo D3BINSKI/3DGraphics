@@ -31,7 +31,7 @@ namespace WinFormsApp
 
             var importedObject = new Obj();
             importedObject.LoadObj(projectDirectory + @"\Models\full-torus-triangulated.obj");
-            Render render = new Render(
+            Render render = new Render(  
                 importedObject, 
                 Image.FromFile(projectDirectory + @"\Images\2k_earth_daymap.jpg"),
                 new NormalMap(Image.FromFile(projectDirectory + @"\NormalMaps\2k_earth_normal_map.tif"), new Size(500, 500)));

@@ -11,7 +11,7 @@ public class Scene
     private Illumination _sceneIllumination;
     private PictureBox _scenePictureBox;
     private DirectBitmap _bitmap;
-    private GraphicTools.Painter _painter;
+    private Painter _painter;
     private Image _choosenSceneImage;
     public bool isVectorInterpolation;
     public bool isNormalMapUsed;
@@ -30,9 +30,9 @@ public class Scene
         ChangeRenderObject(render);
     }
     
-    public Scene(PictureBox pictureBox, Render renderObj, string backgroundFile, Illumination illumination)
+    public Scene(PictureBox pictureBox, List<Render> meshes, string backgroundFile, Illumination illumination)
     {
-        _renderObj = renderObj;
+        _renderObj = meshes.First();
         _scenePictureBox = pictureBox;
         _choosenSceneImage = Image.FromFile(backgroundFile);
         _bitmap = new DirectBitmap(new Bitmap(_choosenSceneImage, pictureBox.Width, pictureBox.Height));
@@ -40,8 +40,7 @@ public class Scene
         _scenePictureBox.Image = _bitmap.Bitmap;
         _painter = new Painter();
         isVectorInterpolation = true;
-        _meshes = new List<Render>();
-        _meshes.Add(_renderObj);
+        _meshes = meshes;
         _camera = new Camera(new Vector3(-100, -100, 100000), new Vector3(1, 1, 1), new Vector3(0, 0, 1));
     }
     
@@ -75,7 +74,7 @@ public class Scene
         _scenePictureBox.Update();
     }
 
-    public void AdjustSceneDimensions()
+    public void UpdateDimensions()
     {
         UpdateBitmap();
         AdjustRenderSize();

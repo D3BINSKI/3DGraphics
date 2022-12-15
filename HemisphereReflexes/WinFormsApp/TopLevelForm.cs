@@ -7,40 +7,62 @@ namespace WinFormsApp
 {
     public partial class TopLevelForm : Form
     {
-        static System.Windows.Forms.Timer mainTimer = new System.Windows.Forms.Timer();
-        List<Point3> _clickedPoints = new();
+        static readonly System.Windows.Forms.Timer _mainTimer = new System.Windows.Forms.Timer();
+        private List<Render> _meshes;
         private Render _renderedObject;
         private Scene _mainScene;
         private Configuration _config;
         private string _projectDir;
         private Camera _camera;
-        
+
 
         public TopLevelForm(Render renderObject)
         {
-            InitializeComponent();
-
-            renderPictureBox.CreateGraphics();
-            _renderedObject = renderObject;
-            
             string workingDirectory = Environment.CurrentDirectory;
             _projectDir = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
 
-            _mainScene = new Scene(renderPictureBox, _renderedObject, 
-                _projectDir + @"\Images\Color-Green.jpg",
-                new Illumination(new Point3(400.0, 400.0, 300.0), Color.CadetBlue, new Point(renderPictureBox.Width/2, renderPictureBox.Height/2), 600));
-            
-            _config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            InitializeComponent();
 
-            // _mainScene.RenderTopView();
-            // _renderedObject.DrawSideView(sideViewPictureBox);
+            renderPictureBox.CreateGraphics();
 
-            _mainScene?.AdjustSceneDimensions();
-            mainTimer.Tick += _mainScene.Render;
-            mainTimer.Interval = 100;
-            mainTimer.Start();
-            
-            
+            _renderedObject = renderObject;
+            _meshes = new List<Render> { _renderedObject };
+            InitializeScene();
+
+            InitializeTimer();
+
+            SetDefaultComponentsValues();
+        }
+
+        private void InitializeScene()
+        {
+            const string backgroundFile = "Color-Green.jpg";
+            var defaultBackground = Path.Join(_projectDir, @"Images", backgroundFile);
+
+            var defaultIllumination = new Illumination(
+                new Point3(400.0, 400.0, 300.0),
+                Color.CadetBlue,
+                new Point(renderPictureBox.Width / 2, renderPictureBox.Height / 2),
+                600);
+
+            _mainScene = new Scene(
+                renderPictureBox,
+                _meshes,
+                defaultBackground,
+                defaultIllumination);
+        }
+
+        private void InitializeTimer()
+        {
+            var timerInterval = 100;
+            _mainScene?.UpdateDimensions();
+            if (_mainScene is not null) _mainTimer.Tick += _mainScene.Render;
+            _mainTimer.Interval = timerInterval;
+            _mainTimer.Start();
+        }
+
+        private void SetDefaultComponentsValues()
+        {
             radioButton1.Checked = true;
             vectorInterpolationSetRadioBttn.Checked = true;
         }
@@ -52,19 +74,19 @@ namespace WinFormsApp
 
         private void pictureBox1_SizeChanged(object sender, EventArgs e)
         {
-            _mainScene?.AdjustSceneDimensions();
+            _mainScene?.UpdateDimensions();
             RefreshMainScene();
         }
 
         private void KdValueChanged(object sender, EventArgs e)
         {
-            _renderedObject.SetKd(kdTrackBar.Value*(1.0/(kdTrackBar.Maximum-kdTrackBar.Minimum)));
+            _renderedObject.SetKd(kdTrackBar.Value * (1.0 / (kdTrackBar.Maximum - kdTrackBar.Minimum)));
             RefreshMainScene();
         }
 
         private void KsValueChanged(object sender, EventArgs e)
         {
-            _renderedObject.SetKs(ksTrackBar.Value*(1.0/(ksTrackBar.Maximum-ksTrackBar.Minimum)));
+            _renderedObject.SetKs(ksTrackBar.Value * (1.0 / (ksTrackBar.Maximum - ksTrackBar.Minimum)));
             RefreshMainScene();
         }
 
@@ -81,12 +103,12 @@ namespace WinFormsApp
 
         private void pauseBttn_Click(object sender, EventArgs e)
         {
-            mainTimer.Stop();
+            _mainTimer.Stop();
         }
 
         private void startBttn_Click(object sender, EventArgs e)
         {
-            mainTimer.Start();
+            _mainTimer.Start();
         }
 
         private void ZValueTrackbarChanged(object sender, EventArgs e)
@@ -96,20 +118,20 @@ namespace WinFormsApp
 
         private void vectorInterpolationSetRadioBttn_CheckedChanged(object sender, EventArgs e)
         {
-            if(vectorInterpolationSetRadioBttn.Checked)
+            if (vectorInterpolationSetRadioBttn.Checked)
             {
                 colorInterpolationSetRadioBttn.Checked = false;
-                
+
                 _mainScene.SetVectorInterpolation();
             }
         }
 
         private void colorInterpolationSetRadioBttn_CheckedChanged(object sender, EventArgs e)
         {
-            if(colorInterpolationSetRadioBttn.Checked)
+            if (colorInterpolationSetRadioBttn.Checked)
             {
                 vectorInterpolationSetRadioBttn.Checked = false;
-                
+
                 _mainScene.SetColorInterpolation();
             }
         }
@@ -123,8 +145,8 @@ namespace WinFormsApp
             openFileDialog.Filter = @"png files (*.png)|*.png|jpg files (*.jpg)|*.jpg";
             openFileDialog.FilterIndex = 2;
             openFileDialog.RestoreDirectory = true;
-            
-            mainTimer.Stop();
+
+            _mainTimer.Stop();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 //Get the path of specified file
@@ -132,7 +154,8 @@ namespace WinFormsApp
                 var image = Image.FromFile(filePath);
                 _mainScene.RenderObj.SetTexture(new Bitmap(image));
             }
-            mainTimer.Start();
+
+            _mainTimer.Start();
         }
 
         private void changeNormalMapBttn_Click(object sender, EventArgs e)
@@ -144,17 +167,18 @@ namespace WinFormsApp
             openFileDialog.Filter = @"jpg files (*.jpg)|*.jpg|png files (*.png)|*.png|tif files (*.tif)|*.tif";
             openFileDialog.FilterIndex = 2;
             openFileDialog.RestoreDirectory = true;
-            
-            mainTimer.Stop();
+
+            _mainTimer.Stop();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 //Get the path of specified file
                 string filePath = openFileDialog.FileName;
                 var image = Image.FromFile(filePath);
-                
+
                 _mainScene.RenderObj.SetNormalMap(new Bitmap(image, renderPictureBox.Width, renderPictureBox.Height));
             }
-            mainTimer.Start();
+
+            _mainTimer.Start();
         }
 
         private void setRenderObjectColorBttn_Click(object sender, EventArgs e)
@@ -167,15 +191,15 @@ namespace WinFormsApp
         private void setRenderObjectBttn_Click(object sender, EventArgs e)
         {
             string modelsDirectory = _projectDir + "/Models";
-            
+
             using OpenFileDialog openFileDialog2 = new OpenFileDialog();
             openFileDialog2.InitialDirectory = modelsDirectory;
             openFileDialog2.Filter = @"obj files (*.obj)|*.obj";
             openFileDialog2.FilterIndex = 2;
             openFileDialog2.RestoreDirectory = true;
-            
-            mainTimer.Stop();
-            
+
+            _mainTimer.Stop();
+
             if (openFileDialog2.ShowDialog() == DialogResult.OK)
             {
                 //Get the path of specified file
@@ -190,8 +214,8 @@ namespace WinFormsApp
                 _mainScene.SetRenderObject(_renderedObject);
                 RefreshMainScene();
             }
-            
-            mainTimer.Start();
+
+            _mainTimer.Start();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
