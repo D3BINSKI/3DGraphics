@@ -252,5 +252,34 @@ namespace WinFormsApp
             radioButton1.Checked = false;
             _scene.SetHeightMapUsage();
         }
+
+        private void cameraYPositionNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshSceneCameraPosition();   
+        }
+
+        private void cameraXPositionNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshSceneCameraPosition();   
+        }
+
+        private void cameraZPositionNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshSceneCameraPosition();   
+        }
+
+        private void RefreshSceneCameraPosition()
+        {
+            _scene.SetCameraPosition(
+                new Vector3(
+                    (float)cameraXPositionNumericUpDown.Value, 
+                    (float)cameraYPositionNumericUpDown.Value, 
+                    (float)cameraZPositionNumericUpDown.Value));
+        }
+
+        private void FieldOfViewTrackBar_ValueChanged(object sender, EventArgs e)
+        {
+            _scene.SetCameraFieldOfView((float)FieldOfViewTrackBar.Value/100f);
+        }
     }
 }

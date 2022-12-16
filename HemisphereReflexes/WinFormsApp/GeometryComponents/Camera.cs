@@ -8,18 +8,22 @@ public class Camera
     private Vector3 Target { get; set; }
     private Vector3 Up { get; set; }
     
+    private float AspectRatio { get; set; }
+
     public Camera()
     {
         Position = new Vector3(0, 0, 0);
-        Target = new Vector3(1, 1, 0);
+        Target = new Vector3(100, 100, 0);
         Up = new Vector3(0, 0, 1);
+        AspectRatio = (float)(Math.PI * 0.4);
     }
 
-    public Camera(Vector3 position, Vector3 target, Vector3 up)
+    public Camera(Vector3 position, Vector3 target, Vector3 up, float aspectRatio)
     {
         Position = position;
         Target = target;
         Up = up;
+        AspectRatio = aspectRatio;
     }
 
     public Matrix4x4 GetViewMatrix()
@@ -29,7 +33,7 @@ public class Camera
     
     public Matrix4x4 GetPerspectiveMatrix(float aspectRatio)
     {
-        return Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI/1.3f, aspectRatio, 0.01f, 1000f);
+        return Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI/1.3f, AspectRatio, 0.01f, 1000f);
     }
     
     public void Move(Vector3 direction)
@@ -57,7 +61,7 @@ public class Camera
     {
         Position = position;
     }
-    
+
     public void SetTarget(Vector3 target)
     {
         Target = target;
@@ -66,6 +70,11 @@ public class Camera
     public void SetUp(Vector3 up)
     {
         Up = up;
+    }
+    
+    public void SetAspectRatio(float aspectRatio)
+    {
+        AspectRatio = aspectRatio;
     }
     
     public Image GetCameraImage(Scene scene)
@@ -79,19 +88,19 @@ public class Camera
         foreach (var mesh in scene.Meshes)
         {
             var worldMatrix = mesh.WorldMatrix;
+            var points = new List<Vector3>();
+
             foreach (var face in mesh.Faces)
             {
-                var points = new List<Vector3>();
                 foreach (var vertex in face.Vertices)
                 {
                     var point = Vector3.Transform(vertex.Position, worldMatrix);
                     point = Vector3.Transform(point, viewMatrix);
                     point = Vector3.Transform(point, perspectiveMatrix);
-                    // point.X = (point.X + 1) * pictureBox.Width / 2;
-                    // point.Y = (1 - point.Y) * pictureBox.Height / 2;
                     points.Add(point);
                 }
                 graphics.DrawPolygon(Pens.Black, points.Select(p => new PointF(p.X, p.Y)).ToArray());
+                points.Clear();
             }
         }
         return image;

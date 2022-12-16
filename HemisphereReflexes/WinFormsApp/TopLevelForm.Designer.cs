@@ -39,16 +39,16 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.cameraZPositionNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.cameraYPositionNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.cameraXPositionNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.FieldOfViewTrackBar = new System.Windows.Forms.TrackBar();
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -78,10 +78,13 @@
             this.groupBox5.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cameraZPositionNumericUpDown)).BeginInit();
             this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cameraYPositionNumericUpDown)).BeginInit();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cameraXPositionNumericUpDown)).BeginInit();
             this.groupBox6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FieldOfViewTrackBar)).BeginInit();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -209,7 +212,7 @@
             // 
             // panel6
             // 
-            this.panel6.Controls.Add(this.textBox3);
+            this.panel6.Controls.Add(this.cameraZPositionNumericUpDown);
             this.panel6.Controls.Add(this.label3);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel6.Location = new System.Drawing.Point(3, 87);
@@ -217,13 +220,14 @@
             this.panel6.Size = new System.Drawing.Size(162, 32);
             this.panel6.TabIndex = 3;
             // 
-            // textBox3
+            // cameraZPositionNumericUpDown
             // 
-            this.textBox3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.textBox3.Location = new System.Drawing.Point(26, 0);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(81, 27);
-            this.textBox3.TabIndex = 1;
+            this.cameraZPositionNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cameraZPositionNumericUpDown.Location = new System.Drawing.Point(26, 0);
+            this.cameraZPositionNumericUpDown.Name = "cameraZPositionNumericUpDown";
+            this.cameraZPositionNumericUpDown.Size = new System.Drawing.Size(136, 27);
+            this.cameraZPositionNumericUpDown.TabIndex = 3;
+            this.cameraZPositionNumericUpDown.ValueChanged += new System.EventHandler(this.cameraZPositionNumericUpDown_ValueChanged);
             // 
             // label3
             // 
@@ -238,7 +242,7 @@
             // 
             // panel5
             // 
-            this.panel5.Controls.Add(this.textBox2);
+            this.panel5.Controls.Add(this.cameraYPositionNumericUpDown);
             this.panel5.Controls.Add(this.label2);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(3, 55);
@@ -246,13 +250,14 @@
             this.panel5.Size = new System.Drawing.Size(162, 32);
             this.panel5.TabIndex = 2;
             // 
-            // textBox2
+            // cameraYPositionNumericUpDown
             // 
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.textBox2.Location = new System.Drawing.Point(26, 0);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(81, 27);
-            this.textBox2.TabIndex = 1;
+            this.cameraYPositionNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cameraYPositionNumericUpDown.Location = new System.Drawing.Point(26, 0);
+            this.cameraYPositionNumericUpDown.Name = "cameraYPositionNumericUpDown";
+            this.cameraYPositionNumericUpDown.Size = new System.Drawing.Size(136, 27);
+            this.cameraYPositionNumericUpDown.TabIndex = 3;
+            this.cameraYPositionNumericUpDown.ValueChanged += new System.EventHandler(this.cameraYPositionNumericUpDown_ValueChanged);
             // 
             // label2
             // 
@@ -267,7 +272,7 @@
             // 
             // panel4
             // 
-            this.panel4.Controls.Add(this.textBox1);
+            this.panel4.Controls.Add(this.cameraXPositionNumericUpDown);
             this.panel4.Controls.Add(this.label1);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel4.Location = new System.Drawing.Point(3, 23);
@@ -275,13 +280,14 @@
             this.panel4.Size = new System.Drawing.Size(162, 32);
             this.panel4.TabIndex = 1;
             // 
-            // textBox1
+            // cameraXPositionNumericUpDown
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.textBox1.Location = new System.Drawing.Point(26, 0);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(81, 27);
-            this.textBox1.TabIndex = 1;
+            this.cameraXPositionNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cameraXPositionNumericUpDown.Location = new System.Drawing.Point(26, 0);
+            this.cameraXPositionNumericUpDown.Name = "cameraXPositionNumericUpDown";
+            this.cameraXPositionNumericUpDown.Size = new System.Drawing.Size(136, 27);
+            this.cameraXPositionNumericUpDown.TabIndex = 2;
+            this.cameraXPositionNumericUpDown.ValueChanged += new System.EventHandler(this.cameraXPositionNumericUpDown_ValueChanged);
             // 
             // label1
             // 
@@ -296,7 +302,7 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.trackBar1);
+            this.groupBox6.Controls.Add(this.FieldOfViewTrackBar);
             this.groupBox6.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox6.Location = new System.Drawing.Point(3, 23);
             this.groupBox6.Name = "groupBox6";
@@ -305,15 +311,16 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "FOV";
             // 
-            // trackBar1
+            // FieldOfViewTrackBar
             // 
-            this.trackBar1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackBar1.Location = new System.Drawing.Point(3, 23);
-            this.trackBar1.Maximum = 100;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(162, 29);
-            this.trackBar1.TabIndex = 4;
-            this.trackBar1.Value = 50;
+            this.FieldOfViewTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FieldOfViewTrackBar.Location = new System.Drawing.Point(3, 23);
+            this.FieldOfViewTrackBar.Maximum = 156;
+            this.FieldOfViewTrackBar.Name = "FieldOfViewTrackBar";
+            this.FieldOfViewTrackBar.Size = new System.Drawing.Size(162, 29);
+            this.FieldOfViewTrackBar.TabIndex = 4;
+            this.FieldOfViewTrackBar.Value = 50;
+            this.FieldOfViewTrackBar.ValueChanged += new System.EventHandler(this.FieldOfViewTrackBar_ValueChanged);
             // 
             // panel2
             // 
@@ -556,13 +563,16 @@
             this.groupBox7.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cameraZPositionNumericUpDown)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cameraYPositionNumericUpDown)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cameraXPositionNumericUpDown)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FieldOfViewTrackBar)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -597,16 +607,13 @@
         private GroupBox groupBox5;
         private GroupBox groupBox7;
         private Panel panel6;
-        private TextBox textBox3;
         private Label label3;
         private Panel panel5;
-        private TextBox textBox2;
         private Label label2;
         private Panel panel4;
-        private TextBox textBox1;
         private Label label1;
         private GroupBox groupBox6;
-        private TrackBar trackBar1;
+        private TrackBar FieldOfViewTrackBar;
         private Panel panel2;
         private GroupBox groupBox4;
         private RadioButton radioButton2;
@@ -629,5 +636,8 @@
         private TrackBar ksTrackBar;
         private Panel canvasPanel;
         private PictureBox renderPictureBox;
+        private NumericUpDown cameraZPositionNumericUpDown;
+        private NumericUpDown cameraYPositionNumericUpDown;
+        private NumericUpDown cameraXPositionNumericUpDown;
     }
 }

@@ -147,4 +147,17 @@ public class Scene
             mesh.SetM(newM);
         }
     }
+    
+    public void SetCameraPosition(Vector3 newPosition)
+    {
+        _camera.SetPosition(newPosition);
+    }
+    
+    public void SetCameraFieldOfView(float newFieldOfView)
+    {
+        if (newFieldOfView is > 0 and < (float)Math.PI/2)
+        {
+            _camera.SetAspectRatio(newFieldOfView);
+        }
+    }
 }
