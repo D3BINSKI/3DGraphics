@@ -17,11 +17,11 @@ public class Vertex: Point3
     
     public Vector3 Position => new Vector3((float)X, (float)Y, (float)Z);
 
-    public void Scale(float kX, float kY, float kZ)
+    public void Scale(float kX, float kY, float kZ, Vector3 center)
     {
-        X = X * kX;
-        Y = Y * kY;
-        Z = Z * kZ;
+        X = (X - center.X) * kX + center.X;
+        Y = (Y - center.Y) * kY + center.Y;
+        Z = (Z - center.Z) * kZ + center.Y;
     }
 
     public void Move(float deltaX, float deltaY, float deltaZ)

@@ -13,18 +13,9 @@ public class Face
         _vertices = vertices;
         _edges = new List<Edge>
         {
-            new Edge(_vertices[0], _vertices[1]),
-            new Edge(_vertices[1], _vertices[2]),
-            new Edge(_vertices[2], _vertices[0])
+            new(_vertices[0], _vertices[1]),
+            new(_vertices[1], _vertices[2]),
+            new(_vertices[2], _vertices[0])
         };
     }
-
-    public void Scale(float scaleX, float scaleY, float scaleZ)
-    {
-        foreach (var vertex in _vertices)
-        {
-            vertex.Scale(scaleX, scaleX, scaleZ);
-        }
-    }
-    
 }

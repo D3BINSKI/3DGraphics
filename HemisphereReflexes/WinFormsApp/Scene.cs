@@ -12,17 +12,15 @@ public class Scene
     private PictureBox _scenePictureBox;
     private DirectBitmap _bitmap;
     private Painter _painter;
-    private Image _choosenSceneImage;
+    private Image _backgroundImage;
     public bool isVectorInterpolation;
     public bool isNormalMapUsed;
     private List<Render> _meshes;
     private Camera _camera;
     
     public PictureBox ScenePictureBox => _scenePictureBox;
-
     public DirectBitmap Bitmap => _bitmap;
     public Render RenderObj => _renderObj;
-
     public List<Render> Meshes => _meshes;
 
     public void SetRenderObject(Render render)
@@ -34,8 +32,8 @@ public class Scene
     {
         _renderObj = meshes.First();
         _scenePictureBox = pictureBox;
-        _choosenSceneImage = Image.FromFile(backgroundFile);
-        _bitmap = new DirectBitmap(new Bitmap(_choosenSceneImage, pictureBox.Width, pictureBox.Height));
+        _backgroundImage = Image.FromFile(backgroundFile);
+        _bitmap = new DirectBitmap(new Bitmap(_backgroundImage, pictureBox.Width, pictureBox.Height));
         _sceneIllumination = illumination;
         _scenePictureBox.Image = _bitmap.Bitmap;
         _painter = new Painter();
@@ -69,52 +67,46 @@ public class Scene
         // _renderObj.FillFaces(_painter, _bitmap, _sceneIllumination, isVectorInterpolation, isNormalMapUsed);
 
         using var graphics = Graphics.FromImage(_bitmap.Bitmap);
-        graphics.DrawLine(Pens.Black,0,0,100,100);
         _scenePictureBox.Invalidate(new Rectangle(0,0,_bitmap.Width, Bitmap.Height));
         _scenePictureBox.Update();
     }
 
-    public void UpdateDimensions()
+    public void UpdateSize()
     {
-        UpdateBitmap();
-        AdjustRenderSize();
+        ResizeBitmap();
+        // ResizeMeshes();
     }
 
     [SuppressMessage("ReSharper.DPA", "DPA0003: Excessive memory allocations in LOH", MessageId = "type: System.Int32[]")]
-    public void UpdateBitmap()
+    public void ResizeBitmap()
     {
-        _bitmap = new DirectBitmap(new Bitmap(_choosenSceneImage, _scenePictureBox.Width, _scenePictureBox.Height));
-        _scenePictureBox.Image = _bitmap.Bitmap;
+        // _bitmap = new DirectBitmap(new Bitmap(_backgroundImage, _scenePictureBox.Width, _scenePictureBox.Height));
+        // _scenePictureBox.Image = _bitmap.Bitmap;
+        // _scenePictureBox.Refresh();
     }
     
-    public void AdjustRenderSize()
+    public void ResizeMeshes()
     {
-        _renderObj.FitToCanvas(_bitmap.Height, _bitmap.Width, 20);
+        // _renderObj.Scale();
     }
 
-    public void Render(object? obj, EventArgs args)
+    public void RenderEvent(object? obj, EventArgs args)
     {
         // _renderObj.FillFaces(_painter, _bitmap, _sceneIllumination, isVectorInterpolation, isNormalMapUsed);
         // _renderObj.DrawMesh(_bitmap);
-        _scenePictureBox.Image = _camera.GetCameraImage(this);
-        _renderObj.Rotate(0.1f);
-        _sceneIllumination.Rotate(); 
-        _scenePictureBox.Invalidate(new Rectangle(0,0,_bitmap.Width, Bitmap.Height));
-        _scenePictureBox.Update();
+        Render();
+        foreach (var mesh in _meshes)
+        {
+            mesh.Rotate(0.1f);
+        }
+        _sceneIllumination.Rotate();
     }
 
-    private void Simulation()
+    public void Render()
     {
-        while(true)
-        {
-            _renderObj.FillFaces(_painter, _bitmap, _sceneIllumination, isVectorInterpolation, isNormalMapUsed);
-            _sceneIllumination.Rotate(); 
-            using var graphics = Graphics.FromImage(this._bitmap.Bitmap);
-            graphics.DrawLine(Pens.Black,0,0,100,100);
-            _scenePictureBox.Invalidate(new Rectangle(0,0,_bitmap.Width, Bitmap.Height));
-            _scenePictureBox.Update();
-            Thread.Sleep(30);
-        }
+        _scenePictureBox.Image = _camera.GetCameraImage(this);
+        _scenePictureBox.Invalidate(new Rectangle(0,0,_bitmap.Width, Bitmap.Height));
+        _scenePictureBox.Update();
     }
 
     public void SetIlluminationHeight(double newHeight)
@@ -126,9 +118,33 @@ public class Scene
     public void ChangeRenderObject(Render newRenderObject)
     {
         _renderObj = newRenderObject;
-        _renderObj.FitToCanvas(_bitmap.Height, _bitmap.Width, 20);
-        _bitmap = new DirectBitmap(new Bitmap(_choosenSceneImage, _scenePictureBox.Width, _scenePictureBox.Height));
+        // _renderObj.Scale();
+        _bitmap = new DirectBitmap(new Bitmap(_backgroundImage, _scenePictureBox.Width, _scenePictureBox.Height));
         
-        AdjustRenderSize();
+        ResizeMeshes();
+    }
+    
+    public void SetGlobalKd(double newKd)
+    {
+        foreach (var mesh in _meshes)
+        {
+            mesh.SetKd(newKd);
+        }
+    }
+    
+    public void SetGlobalKs(double newKs)
+    {
+        foreach (var mesh in _meshes)
+        {
+            mesh.SetKs(newKs);
+        }
+    }
+
+    public void SetGlobalM(double newM)
+    {
+        foreach (var mesh in _meshes)
+        {
+            mesh.SetM(newM);
+        }
     }
 }

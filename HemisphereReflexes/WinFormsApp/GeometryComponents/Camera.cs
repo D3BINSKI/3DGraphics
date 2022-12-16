@@ -29,7 +29,7 @@ public class Camera
     
     public Matrix4x4 GetPerspectiveMatrix(float aspectRatio)
     {
-        return Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI/1.8f, aspectRatio, 0.01f, 1000f);
+        return Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI/1.3f, aspectRatio, 0.01f, 1000f);
     }
     
     public void Move(Vector3 direction)

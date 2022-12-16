@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.canvasPanel = new System.Windows.Forms.Panel();
+            this.renderPictureBox = new System.Windows.Forms.PictureBox();
+            this.ControlsPanel = new System.Windows.Forms.Panel();
             this.controlsGroupBox = new System.Windows.Forms.GroupBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.startBttn = new System.Windows.Forms.Button();
@@ -66,9 +69,10 @@
             this.kdTrackBar = new System.Windows.Forms.TrackBar();
             this.ksGroupBox = new System.Windows.Forms.GroupBox();
             this.ksTrackBar = new System.Windows.Forms.TrackBar();
-            this.canvasPanel = new System.Windows.Forms.Panel();
-            this.renderPictureBox = new System.Windows.Forms.PictureBox();
             this.mainPanel.SuspendLayout();
+            this.canvasPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.renderPictureBox)).BeginInit();
+            this.ControlsPanel.SuspendLayout();
             this.controlsGroupBox.SuspendLayout();
             this.panel3.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -90,19 +94,48 @@
             ((System.ComponentModel.ISupportInitialize)(this.kdTrackBar)).BeginInit();
             this.ksGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ksTrackBar)).BeginInit();
-            this.canvasPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.renderPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.controlsGroupBox);
             this.mainPanel.Controls.Add(this.canvasPanel);
+            this.mainPanel.Controls.Add(this.ControlsPanel);
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(959, 671);
             this.mainPanel.TabIndex = 0;
+            // 
+            // canvasPanel
+            // 
+            this.canvasPanel.Controls.Add(this.renderPictureBox);
+            this.canvasPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.canvasPanel.Location = new System.Drawing.Point(0, 0);
+            this.canvasPanel.Name = "canvasPanel";
+            this.canvasPanel.Size = new System.Drawing.Size(578, 671);
+            this.canvasPanel.TabIndex = 6;
+            // 
+            // renderPictureBox
+            // 
+            this.renderPictureBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.renderPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.renderPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.renderPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.renderPictureBox.Name = "renderPictureBox";
+            this.renderPictureBox.Size = new System.Drawing.Size(578, 671);
+            this.renderPictureBox.TabIndex = 1;
+            this.renderPictureBox.TabStop = false;
+            this.renderPictureBox.WaitOnLoad = true;
+            this.renderPictureBox.SizeChanged += new System.EventHandler(this.pictureBox1_SizeChanged);
+            // 
+            // ControlsPanel
+            // 
+            this.ControlsPanel.Controls.Add(this.controlsGroupBox);
+            this.ControlsPanel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ControlsPanel.Location = new System.Drawing.Point(578, 0);
+            this.ControlsPanel.Name = "ControlsPanel";
+            this.ControlsPanel.Size = new System.Drawing.Size(381, 671);
+            this.ControlsPanel.TabIndex = 4;
             // 
             // controlsGroupBox
             // 
@@ -110,12 +143,12 @@
             this.controlsGroupBox.Controls.Add(this.groupBox5);
             this.controlsGroupBox.Controls.Add(this.panel2);
             this.controlsGroupBox.Controls.Add(this.panel1);
-            this.controlsGroupBox.Dock = System.Windows.Forms.DockStyle.Right;
-            this.controlsGroupBox.Location = new System.Drawing.Point(589, 0);
+            this.controlsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.controlsGroupBox.Location = new System.Drawing.Point(0, 0);
             this.controlsGroupBox.Margin = new System.Windows.Forms.Padding(5);
             this.controlsGroupBox.Name = "controlsGroupBox";
-            this.controlsGroupBox.Size = new System.Drawing.Size(370, 671);
-            this.controlsGroupBox.TabIndex = 1;
+            this.controlsGroupBox.Size = new System.Drawing.Size(381, 671);
+            this.controlsGroupBox.TabIndex = 3;
             this.controlsGroupBox.TabStop = false;
             this.controlsGroupBox.Text = "Controls";
             // 
@@ -127,7 +160,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(3, 23);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(364, 74);
+            this.panel3.Size = new System.Drawing.Size(375, 74);
             this.panel3.TabIndex = 11;
             // 
             // startBttn
@@ -138,7 +171,6 @@
             this.startBttn.TabIndex = 0;
             this.startBttn.Text = "Start";
             this.startBttn.UseVisualStyleBackColor = true;
-            this.startBttn.Click += new System.EventHandler(this.startBttn_Click);
             // 
             // pauseBttn
             // 
@@ -149,7 +181,6 @@
             this.pauseBttn.TabIndex = 1;
             this.pauseBttn.Text = "Pause";
             this.pauseBttn.UseVisualStyleBackColor = true;
-            this.pauseBttn.Click += new System.EventHandler(this.pauseBttn_Click);
             // 
             // groupBox5
             // 
@@ -320,7 +351,6 @@
             this.radioButton2.TabIndex = 2;
             this.radioButton2.Text = "Height Map";
             this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -333,7 +363,6 @@
             this.radioButton1.TabIndex = 1;
             this.radioButton1.Text = "Normal Map";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // setRenderObjectBttn
             // 
@@ -345,7 +374,6 @@
             this.setRenderObjectBttn.TabIndex = 4;
             this.setRenderObjectBttn.Text = "Set Render Object";
             this.setRenderObjectBttn.UseVisualStyleBackColor = true;
-            this.setRenderObjectBttn.Click += new System.EventHandler(this.setRenderObjectBttn_Click);
             // 
             // setRenderObjectColorBttn
             // 
@@ -356,7 +384,6 @@
             this.setRenderObjectColorBttn.TabIndex = 3;
             this.setRenderObjectColorBttn.Text = "Set Static Color";
             this.setRenderObjectColorBttn.UseVisualStyleBackColor = true;
-            this.setRenderObjectColorBttn.Click += new System.EventHandler(this.setRenderObjectColorBttn_Click);
             // 
             // chngTextureBttn
             // 
@@ -367,7 +394,6 @@
             this.chngTextureBttn.TabIndex = 2;
             this.chngTextureBttn.Text = "Set Texture";
             this.chngTextureBttn.UseVisualStyleBackColor = true;
-            this.chngTextureBttn.Click += new System.EventHandler(this.chngTextureBttn_Click);
             // 
             // changeNormalMapBttn
             // 
@@ -379,7 +405,6 @@
             this.changeNormalMapBttn.TabIndex = 1;
             this.changeNormalMapBttn.Text = "Set Normal Map";
             this.changeNormalMapBttn.UseVisualStyleBackColor = true;
-            this.changeNormalMapBttn.Click += new System.EventHandler(this.changeNormalMapBttn_Click);
             // 
             // groupBox3
             // 
@@ -398,7 +423,7 @@
             // 
             this.vectorInterpolationSetRadioBttn.AutoSize = true;
             this.vectorInterpolationSetRadioBttn.Checked = true;
-            this.vectorInterpolationSetRadioBttn.Location = new System.Drawing.Point(3, 59);
+            this.vectorInterpolationSetRadioBttn.Location = new System.Drawing.Point(3, 61);
             this.vectorInterpolationSetRadioBttn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.vectorInterpolationSetRadioBttn.Name = "vectorInterpolationSetRadioBttn";
             this.vectorInterpolationSetRadioBttn.Size = new System.Drawing.Size(161, 24);
@@ -406,19 +431,17 @@
             this.vectorInterpolationSetRadioBttn.TabStop = true;
             this.vectorInterpolationSetRadioBttn.Text = "vector interpolation";
             this.vectorInterpolationSetRadioBttn.UseVisualStyleBackColor = true;
-            this.vectorInterpolationSetRadioBttn.CheckedChanged += new System.EventHandler(this.vectorInterpolationSetRadioBttn_CheckedChanged);
             // 
             // colorInterpolationSetRadioBttn
             // 
             this.colorInterpolationSetRadioBttn.AutoSize = true;
-            this.colorInterpolationSetRadioBttn.Location = new System.Drawing.Point(7, 25);
+            this.colorInterpolationSetRadioBttn.Location = new System.Drawing.Point(7, 27);
             this.colorInterpolationSetRadioBttn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.colorInterpolationSetRadioBttn.Name = "colorInterpolationSetRadioBttn";
             this.colorInterpolationSetRadioBttn.Size = new System.Drawing.Size(154, 24);
             this.colorInterpolationSetRadioBttn.TabIndex = 0;
             this.colorInterpolationSetRadioBttn.Text = "color interpolation";
             this.colorInterpolationSetRadioBttn.UseVisualStyleBackColor = true;
-            this.colorInterpolationSetRadioBttn.CheckedChanged += new System.EventHandler(this.colorInterpolationSetRadioBttn_CheckedChanged);
             // 
             // panel1
             // 
@@ -452,7 +475,6 @@
             this.zValueTrackBar.Size = new System.Drawing.Size(157, 29);
             this.zValueTrackBar.TabIndex = 4;
             this.zValueTrackBar.Value = 50;
-            this.zValueTrackBar.ValueChanged += new System.EventHandler(this.ZValueTrackbarChanged);
             // 
             // mGroupBox
             // 
@@ -474,7 +496,6 @@
             this.mTrackBar.Size = new System.Drawing.Size(157, 29);
             this.mTrackBar.TabIndex = 4;
             this.mTrackBar.Value = 50;
-            this.mTrackBar.ValueChanged += new System.EventHandler(this.MValueChanged);
             // 
             // groupBox1
             // 
@@ -495,7 +516,6 @@
             this.kdTrackBar.Size = new System.Drawing.Size(164, 29);
             this.kdTrackBar.TabIndex = 4;
             this.kdTrackBar.Value = 50;
-            this.kdTrackBar.ValueChanged += new System.EventHandler(this.KdValueChanged);
             // 
             // ksGroupBox
             // 
@@ -516,31 +536,6 @@
             this.ksTrackBar.Size = new System.Drawing.Size(161, 30);
             this.ksTrackBar.TabIndex = 4;
             this.ksTrackBar.Value = 50;
-            this.ksTrackBar.ValueChanged += new System.EventHandler(this.KsValueChanged);
-            // 
-            // canvasPanel
-            // 
-            this.canvasPanel.Controls.Add(this.renderPictureBox);
-            this.canvasPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.canvasPanel.Location = new System.Drawing.Point(0, 0);
-            this.canvasPanel.Margin = new System.Windows.Forms.Padding(15);
-            this.canvasPanel.Name = "canvasPanel";
-            this.canvasPanel.Size = new System.Drawing.Size(959, 671);
-            this.canvasPanel.TabIndex = 0;
-            // 
-            // renderPictureBox
-            // 
-            this.renderPictureBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.renderPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.renderPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.renderPictureBox.Location = new System.Drawing.Point(0, 0);
-            this.renderPictureBox.Name = "renderPictureBox";
-            this.renderPictureBox.Size = new System.Drawing.Size(959, 671);
-            this.renderPictureBox.TabIndex = 0;
-            this.renderPictureBox.TabStop = false;
-            this.renderPictureBox.WaitOnLoad = true;
-            this.renderPictureBox.SizeChanged += new System.EventHandler(this.pictureBox1_SizeChanged);
-            this.renderPictureBox.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // TopLevelForm
             // 
@@ -551,6 +546,9 @@
             this.Name = "TopLevelForm";
             this.Text = "Light Simulation";
             this.mainPanel.ResumeLayout(false);
+            this.canvasPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.renderPictureBox)).EndInit();
+            this.ControlsPanel.ResumeLayout(false);
             this.controlsGroupBox.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
@@ -584,8 +582,6 @@
             this.ksGroupBox.ResumeLayout(false);
             this.ksGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ksTrackBar)).EndInit();
-            this.canvasPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.renderPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -593,29 +589,35 @@
         #endregion
 
         private Panel mainPanel;
-        private Panel canvasPanel;
-        private PictureBox renderPictureBox;
+        private Panel ControlsPanel;
         private GroupBox controlsGroupBox;
-        private Button pauseBttn;
-        private Button startBttn;
-        private Panel panel2;
-        private GroupBox groupBox3;
-        private RadioButton vectorInterpolationSetRadioBttn;
-        private RadioButton colorInterpolationSetRadioBttn;
-        private Button chngTextureBttn;
-        private Button changeNormalMapBttn;
-        private Button setRenderObjectColorBttn;
-        private Button setRenderObjectBttn;
         private Panel panel3;
+        private Button startBttn;
+        private Button pauseBttn;
         private GroupBox groupBox5;
         private GroupBox groupBox7;
+        private Panel panel6;
+        private TextBox textBox3;
+        private Label label3;
+        private Panel panel5;
+        private TextBox textBox2;
+        private Label label2;
         private Panel panel4;
+        private TextBox textBox1;
         private Label label1;
         private GroupBox groupBox6;
         private TrackBar trackBar1;
+        private Panel panel2;
         private GroupBox groupBox4;
         private RadioButton radioButton2;
         private RadioButton radioButton1;
+        private Button setRenderObjectBttn;
+        private Button setRenderObjectColorBttn;
+        private Button chngTextureBttn;
+        private Button changeNormalMapBttn;
+        private GroupBox groupBox3;
+        private RadioButton vectorInterpolationSetRadioBttn;
+        private RadioButton colorInterpolationSetRadioBttn;
         private Panel panel1;
         private GroupBox groupBox2;
         private TrackBar zValueTrackBar;
@@ -625,12 +627,7 @@
         private TrackBar kdTrackBar;
         private GroupBox ksGroupBox;
         private TrackBar ksTrackBar;
-        private Panel panel6;
-        private TextBox textBox3;
-        private Label label3;
-        private Panel panel5;
-        private TextBox textBox2;
-        private Label label2;
-        private TextBox textBox1;
+        private Panel canvasPanel;
+        private PictureBox renderPictureBox;
     }
 }

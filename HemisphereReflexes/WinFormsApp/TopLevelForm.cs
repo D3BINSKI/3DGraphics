@@ -1,5 +1,6 @@
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using ObjParser;
 using WinFormsApp.GeometryComponents;
 using WinFormsApp.GraphicTools;
@@ -27,14 +28,27 @@ namespace WinFormsApp
             var importedObject = new Obj();
             importedObject.LoadObj(_projectDir + @"\Models\full-torus-triangulated.obj");
             
-            Render render = new Render(  
+            Render render1 = new Render(  
                 importedObject, 
                 Image.FromFile(_projectDir + @"\Images\2k_earth_daymap.jpg"),
-                new NormalMap(Image.FromFile(_projectDir + @"\NormalMaps\2k_earth_normal_map.tif"), new Size(500, 500)));
+                new NormalMap(Image.FromFile(_projectDir + @"\NormalMaps\2k_earth_normal_map.tif"), new Size(500, 500)),
+                new Vector3(1600, 700, 1200),200);
+            
+            
+            Render render2 = new Render(  
+                importedObject, 
+                Image.FromFile(_projectDir + @"\Images\2k_earth_daymap.jpg"),
+                new NormalMap(Image.FromFile(_projectDir + @"\NormalMaps\2k_earth_normal_map.tif"), new Size(500, 500)),
+                new Vector3(700, 100, 400), 500);
+            
 
-            _renderedObject = render;
-            _meshes = new List<Render> { _renderedObject };
+            _renderedObject = render1;
+            // _renderedObject.Scale(500);
+            _meshes = new List<Render> { render1, render2 };
             InitializeScene();
+            _scene?.UpdateSize();
+
+            _scene!.Render();
 
             InitializeTimer();
 
@@ -59,14 +73,13 @@ namespace WinFormsApp
                 _meshes,
                 defaultBackground,
                 defaultIllumination,
-                defaultCamera);
+                defaultCamera); 
         }
 
         private void InitializeTimer()
         {
-            var timerInterval = 100;
-            _scene?.UpdateDimensions();
-            if (_scene is not null) _mainTimer.Tick += _scene.Render;
+            const int timerInterval = 100;
+            _mainTimer.Tick += _scene.RenderEvent;
             _mainTimer.Interval = timerInterval;
             _mainTimer.Start();
         }
@@ -84,25 +97,25 @@ namespace WinFormsApp
 
         private void pictureBox1_SizeChanged(object sender, EventArgs e)
         {
-            _scene?.UpdateDimensions();
-            RefreshMainScene();
+            _scene?.UpdateSize();
+            _scene.Render();
         }
 
         private void KdValueChanged(object sender, EventArgs e)
         {
-            _renderedObject.SetKd(kdTrackBar.Value * (1.0 / (kdTrackBar.Maximum - kdTrackBar.Minimum)));
+            _scene.SetGlobalKd(kdTrackBar.Value * (1.0 / (kdTrackBar.Maximum - kdTrackBar.Minimum)));
             RefreshMainScene();
         }
 
         private void KsValueChanged(object sender, EventArgs e)
         {
-            _renderedObject.SetKs(ksTrackBar.Value * (1.0 / (ksTrackBar.Maximum - ksTrackBar.Minimum)));
+            _scene.SetGlobalKs(ksTrackBar.Value * (1.0 / (ksTrackBar.Maximum - ksTrackBar.Minimum)));
             RefreshMainScene();
         }
 
         private void MValueChanged(object sender, EventArgs e)
         {
-            _renderedObject.SetM(mTrackBar.Value);
+            _scene.SetGlobalM(mTrackBar.Value);
             RefreshMainScene();
         }
 
@@ -219,8 +232,8 @@ namespace WinFormsApp
                 _renderedObject = new Render(
                     importedObject,
                     _renderedObject.TextureImage,
-                    _renderedObject.NormalMap);
-                _renderedObject.FitToCanvas(renderPictureBox.Height, renderPictureBox.Width, 20);
+                    _renderedObject.NormalMap, new Vector3(100, 100, 0), 100);
+                _renderedObject.Scale(600);
                 _scene.SetRenderObject(_renderedObject);
                 RefreshMainScene();
             }
