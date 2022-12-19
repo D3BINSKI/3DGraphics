@@ -8,22 +8,22 @@ public class Camera
     private Vector3 Target { get; set; }
     private Vector3 Up { get; set; }
     
-    private float AspectRatio { get; set; }
+    private float FieldOfView { get; set; }
 
     public Camera()
     {
         Position = new Vector3(0, 0, 0);
         Target = new Vector3(100, 100, 0);
         Up = new Vector3(0, 0, 1);
-        AspectRatio = (float)(Math.PI * 0.4);
+        FieldOfView = (float)(Math.PI * 0.4);
     }
 
-    public Camera(Vector3 position, Vector3 target, Vector3 up, float aspectRatio)
+    public Camera(Vector3 position, Vector3 target, Vector3 up, float fieldOfView)
     {
         Position = position;
         Target = target;
         Up = up;
-        AspectRatio = aspectRatio;
+        FieldOfView = fieldOfView;
     }
 
     public Matrix4x4 GetViewMatrix()
@@ -33,7 +33,7 @@ public class Camera
     
     public Matrix4x4 GetPerspectiveMatrix(float aspectRatio)
     {
-        return Matrix4x4.CreatePerspectiveFieldOfView(MathF.PI/1.3f, AspectRatio, 0.01f, 1000f);
+        return Matrix4x4.CreatePerspectiveFieldOfView(FieldOfView, 1, 0.01f, 1000f);
     }
     
     public void Move(Vector3 direction)
@@ -72,9 +72,9 @@ public class Camera
         Up = up;
     }
     
-    public void SetAspectRatio(float aspectRatio)
+    public void SetFieldOfView(float fieldOfView)
     {
-        AspectRatio = aspectRatio;
+        FieldOfView = fieldOfView;
     }
     
     public Image GetCameraImage(Scene scene)

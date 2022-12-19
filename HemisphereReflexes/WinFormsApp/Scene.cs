@@ -157,7 +157,7 @@ public class Scene
     {
         if (newFieldOfView is > 0 and < (float)Math.PI/2)
         {
-            _camera.SetAspectRatio(newFieldOfView);
+            _camera.SetFieldOfView(newFieldOfView);
         }
     }
 }

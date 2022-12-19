@@ -32,14 +32,14 @@ namespace WinFormsApp
                 importedObject, 
                 Image.FromFile(_projectDir + @"\Images\2k_earth_daymap.jpg"),
                 new NormalMap(Image.FromFile(_projectDir + @"\NormalMaps\2k_earth_normal_map.tif"), new Size(500, 500)),
-                new Vector3(1600, 700, 1200),200);
+                new Vector3(900, 300, 450),100, new Vector3(1, 0, 0));
             
             
             Render render2 = new Render(  
                 importedObject, 
                 Image.FromFile(_projectDir + @"\Images\2k_earth_daymap.jpg"),
                 new NormalMap(Image.FromFile(_projectDir + @"\NormalMaps\2k_earth_normal_map.tif"), new Size(500, 500)),
-                new Vector3(700, 100, 400), 500);
+                new Vector3(350, 500, 400), 300, new Vector3(0, 1, 0));
             
 
             _renderedObject = render1;
@@ -98,7 +98,7 @@ namespace WinFormsApp
         private void pictureBox1_SizeChanged(object sender, EventArgs e)
         {
             _scene?.UpdateSize();
-            _scene.Render();
+            _scene?.Render();
         }
 
         private void KdValueChanged(object sender, EventArgs e)
@@ -223,20 +223,20 @@ namespace WinFormsApp
 
             _mainTimer.Stop();
 
-            if (openFileDialog2.ShowDialog() == DialogResult.OK)
-            {
-                //Get the path of specified file
-                string filePath = openFileDialog2.FileName;
-                var importedObject = new Obj();
-                importedObject.LoadObj(filePath);
-                _renderedObject = new Render(
-                    importedObject,
-                    _renderedObject.TextureImage,
-                    _renderedObject.NormalMap, new Vector3(100, 100, 0), 100);
-                _renderedObject.Scale(600);
-                _scene.SetRenderObject(_renderedObject);
-                RefreshMainScene();
-            }
+            // if (openFileDialog2.ShowDialog() == DialogResult.OK)
+            // {
+            //     //Get the path of specified file
+            //     string filePath = openFileDialog2.FileName;
+            //     var importedObject = new Obj();
+            //     importedObject.LoadObj(filePath);
+            //     _renderedObject = new Render(
+            //         importedObject,
+            //         _renderedObject.TextureImage,
+            //         _renderedObject.NormalMap, new Vector3(100, 100, 0), 100);
+            //     _renderedObject.Scale(600);
+            //     _scene.SetRenderObject(_renderedObject);
+            //     RefreshMainScene();
+            // }
 
             _mainTimer.Start();
         }
@@ -279,7 +279,8 @@ namespace WinFormsApp
 
         private void FieldOfViewTrackBar_ValueChanged(object sender, EventArgs e)
         {
-            _scene.SetCameraFieldOfView((float)FieldOfViewTrackBar.Value/100f);
+            var radians = (float)(FieldOfViewTrackBar.Value * (Math.PI / 180));
+            _scene.SetCameraFieldOfView(radians);
         }
     }
 }

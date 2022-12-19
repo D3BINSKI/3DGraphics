@@ -33,6 +33,7 @@ public class Render
     private Bitmap _textureBitmap;
     private HeightMap _heightMap;
     private Matrix4x4 _modelMatrix;
+    private Vector3 _rotationDirection;
     
     public Image TextureImage { get => _textureImage; set => _textureImage = value; }
     
@@ -51,7 +52,8 @@ public class Render
     public List<Vertex> Vertices { get; }
     public IEnumerable<Edge> Edges { get; }
 
-    public Render(Obj renderedObject, Image textureImage, NormalMap? normalMap, Vector3 position, double scale)
+    public Render(Obj renderedObject, Image textureImage, NormalMap? normalMap, Vector3 position, double scale,
+        Vector3 rotationDirection)
     {
         Vertices = new List<Vertex>();
         Faces = new List<Face>();
@@ -61,11 +63,12 @@ public class Render
 
         foreach (var vertex in renderedObject.VertexList)
         {
-            var faceContainingCurrentVertex = renderedObject.FaceList.First(face => face.VertexIndexList.Contains(vertex.Index));
+            var faceContainingCurrentVertex =
+                renderedObject.FaceList.First(face => face.VertexIndexList.Contains(vertex.Index));
             var indexOfVertexInArray = Array.IndexOf(faceContainingCurrentVertex.VertexIndexList, vertex.Index);
             var normalVectorIndex = faceContainingCurrentVertex.NormalVectorIndexList[indexOfVertexInArray];
             var normalVector = renderedObject.NormalVectorList[normalVectorIndex - 1];
-            Vertices.Add(new Vertex(new Point3((float)vertex.X, (float)vertex.Y, (float)vertex.Z), vertex.Index, 
+            Vertices.Add(new Vertex(new Point3((float)vertex.X, (float)vertex.Y, (float)vertex.Z), vertex.Index,
                 new Vector3((float)normalVector.X, (float)normalVector.Y, (float)normalVector.Z)));
         }
 
@@ -80,7 +83,7 @@ public class Render
         _center = new Vector3((float)((renderedObject.Size.XMax + renderedObject.Size.XMin) / 2),
             (float)((renderedObject.Size.YMax + renderedObject.Size.YMin) / 2),
             (float)((renderedObject.Size.ZMax + renderedObject.Size.ZMin) / 2));
-        
+
         Scale(scale);
         MoveCenter(position);
 
@@ -95,8 +98,9 @@ public class Render
                 Image.FromFile(
                     @"D:\Software\Projects\Computer Graphics\hemisphere_reflexes\HemisphereReflexes\WinFormsApp\Height Map\great_lakes.jpg"),
                 new Size(500, 500));
-        
-        _modelMatrix = Matrix4x4.CreateRotationX((float)(Math.PI/2), _center);
+
+        CreateRotationMatrix(rotationDirection);
+        _modelMatrix = Matrix4x4.CreateRotationX((float)(Math.PI / 2), _center);
 
     }
 
@@ -209,9 +213,40 @@ public class Render
         }
         
     }
+    
+    private void CreateRotationMatrix(Vector3 rotationDirection)
+    {
+        _rotationDirection = rotationDirection;
+        var rotationMatrix = Matrix4x4.Identity;
+        if (_rotationDirection.X != 0)
+        {
+            rotationMatrix *= Matrix4x4.CreateRotationX(0, _center);
+        }
+        if (_rotationDirection.Y != 0)
+        {
+            rotationMatrix *= Matrix4x4.CreateRotationY(0, _center);
+        }
+        if (_rotationDirection.Z != 0)
+        {
+            rotationMatrix *= Matrix4x4.CreateRotationZ(0, _center);
+        }
+        _modelMatrix = rotationMatrix;
+    }
 
     public void Rotate(float radians)
     {
-        _modelMatrix = Matrix4x4.CreateRotationX(radians, _center)*_modelMatrix;
+        if (_rotationDirection.X != 0)
+        {
+            _modelMatrix *= Matrix4x4.CreateRotationX(radians, _center);
+        }
+        if (_rotationDirection.Y != 0)
+        {
+            _modelMatrix *= Matrix4x4.CreateRotationY(radians, _center);
+        }
+        if (_rotationDirection.Z != 0)
+        {
+            _modelMatrix *= Matrix4x4.CreateRotationZ(radians, _center);
+        }
     }
+    
 }
